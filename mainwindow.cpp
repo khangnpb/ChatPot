@@ -8,21 +8,20 @@
 //}
 
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     setWindowTitle("Chatbot");
 
-    text_edit_ = new QTextEdit;
-    line_edit_ = new QLineEdit;
-    send_button_ = new QPushButton("Send");
+    text_edit_ = new QTextEdit (this);
+    line_edit_ = new QLineEdit (this);
+    send_button_ = new QPushButton( "Send", this);
 
-    QVBoxLayout *layout = new QVBoxLayout;
+    QVBoxLayout *layout = new QVBoxLayout (this);
     layout->addWidget(text_edit_);
     layout->addWidget(line_edit_);
     layout->addWidget(send_button_);
 
-    QWidget *central_widget = new QWidget;
+    QWidget *central_widget = new QWidget(this);
     central_widget->setLayout(layout);
     setCentralWidget(central_widget);
 
