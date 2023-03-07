@@ -34,13 +34,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 void MainWindow::send_message()
 {
+    QObject::disconnect(send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
+
     QString user_input = line_edit_->text();
     add_message("You", user_input);
-
     QString response = generate_text(user_input, 50, 1, 0.5);
-
     add_message("Chatbot", response);
     line_edit_->clear();
+
+    QObject::connect(send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
+
 }
 
 void MainWindow::add_message(const QString &name, const QString &message)
