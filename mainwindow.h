@@ -66,7 +66,7 @@ private slots:
     QByteArray post_data(const QString &text)
     {
         QJsonObject json;
-        json["text"] = text;
+        json["prompt"] = text;
         json["model"] = "text-davinci-002";
         QJsonDocument json_doc(json);
         return json_doc.toJson();
@@ -88,7 +88,7 @@ private:
            request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
            QJsonObject prompt_obj;
-           prompt_obj["text"] = prompt;
+           prompt_obj["prompt"] = prompt;
            prompt_obj["temperature"] = temperature;
            prompt_obj["max_tokens"] = max_tokens;
            prompt_obj["top_p"] = 1;
