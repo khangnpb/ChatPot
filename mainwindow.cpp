@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     line_edit_ = new QLineEdit (this);
     send_button_ = new QPushButton( "Send", this);
 
+    text_edit_->setReadOnly(true);
+
     QVBoxLayout *layout = new QVBoxLayout (this);
     layout->addWidget(text_edit_);
     layout->addWidget(line_edit_);
@@ -26,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setCentralWidget(central_widget);
 
     QObject::connect(send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
+    QObject::connect(line_edit_, &QLineEdit::returnPressed, this, &MainWindow::send_message);
 
     api_key_ = "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";
     chatbot_id_ = "text-babbage-001";
@@ -35,15 +38,18 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 void MainWindow::send_message()
 {
     QObject::disconnect(send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
+    QObject::disconnect(line_edit_, &QLineEdit::returnPressed, this, &MainWindow::send_message);
+
 
     QString user_input = line_edit_->text();
+    line_edit_->clear();
+
     add_message("You", user_input);
     QString response = generate_text(user_input, 50, 1, 0.5);
     add_message("Chatbot", response);
-    line_edit_->clear();
 
     QObject::connect(send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
-
+    QObject::connect(line_edit_, &QLineEdit::returnPressed, this, &MainWindow::send_message);
 }
 
 void MainWindow::add_message(const QString &name, const QString &message)
