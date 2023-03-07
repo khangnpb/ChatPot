@@ -40,7 +40,7 @@ public:
         QObject::connect(send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
 
         api_key_ = "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";
-        chatbot_id_ = "text-davinci-003";
+        chatbot_id_ = "text-babbage-001";
         url_ = "https://api.openai.com/v1/engines/" + chatbot_id_ + "/completions";
     }
 
@@ -51,34 +51,9 @@ private slots:
         QString user_input = line_edit_->text();
         add_message("You", user_input);
 
-        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-        QNetworkRequest request(url_);
-        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-        request.setRawHeader("Authorization", ("Bearer " + api_key_).toUtf8());
+        QString response = generate_text(user_input, 50, 1, 0.5);
 
-
-
-        connect(manager, &QNetworkAccessManager::finished, [=](QNetworkReply *reply){
-
-            if (reply->error() != QNetworkReply::NoError) {
-                QString httpStatus = reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
-                QString errorMsg = reply->errorString();
-                qDebug() << "Error " << httpStatus << ": " << errorMsg;
-                add_message("Error", "An error occurred while trying to communicate with the chatbot.");
-                add_message("Error",  httpStatus + ":" +  errorMsg);
-            } else {
-                QByteArray response_data = reply->readAll();
-                QJsonObject response = QJsonDocument::fromJson(response_data).object();
-                QString chatbot_response = response["choices"].toArray()[0].toObject()["text"].toString();
-                add_message("Chatbot", chatbot_response);
-            }
-
-            reply->deleteLater();
-            manager->deleteLater();
-        });
-
-        QByteArray json_data = post_data(user_input);
-        manager->post(request, json_data);
+        add_message("Chatbot", response);
         line_edit_->clear();
     }
 
@@ -116,6 +91,8 @@ private:
            prompt_obj["text"] = prompt;
            prompt_obj["temperature"] = temperature;
            prompt_obj["max_tokens"] = max_tokens;
+           prompt_obj["top_p"] = 1;
+           prompt_obj["frequency_penalty"] = 0.5;
            prompt_obj["n"] = n;
 
            QJsonObject data_obj;
@@ -132,8 +109,9 @@ private:
            }
 
            if (reply->error() != QNetworkReply::NoError) {
+               qDebug() << "Reply:" << QString(reply->readAll());
                qDebug() << "Error:" << reply->errorString();
-               return "";
+               return "Error";
            }
 
            QString response = QString::fromUtf8(reply->readAll());
