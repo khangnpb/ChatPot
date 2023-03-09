@@ -1,5 +1,9 @@
 QT       += core gui
 QT    += network
+
+LIBS += C:\Users\Admin\AppData\Local\Programs\Python\Python311\libs\python311.lib
+INCLUDEPATH = C:\Users\Admin\AppData\Local\Programs\Python\Python311\include\ C:\Users\Admin\AppData\Local\Programs\Python\Python311\libs\
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17

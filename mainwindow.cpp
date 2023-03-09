@@ -1,11 +1,12 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-
+//#include "ui_mainwindow.h"
+//#include <QObject>
+#include <Python.h>
 
 //MainWindow::~MainWindow()
 //{
 //    delete ui;
-//}
+//}a
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
@@ -31,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QObject::connect(line_edit_, &QLineEdit::returnPressed, this, &MainWindow::send_message);
 
     api_key_ = "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";
-    chatbot_id_ = "text-babbage-001";
+    chatbot_id_ = "davinci";
     url_ = "https://api.openai.com/v1/engines/" + chatbot_id_ + "/completions";
 }
 
@@ -40,11 +41,36 @@ void MainWindow::send_message()
     QObject::disconnect(send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
     QObject::disconnect(line_edit_, &QLineEdit::returnPressed, this, &MainWindow::send_message);
 
-
     QString user_input = line_edit_->text();
     line_edit_->clear();
 
     add_message("You", user_input);
+
+//    // Initialize Python interpreter
+//       Py_Initialize();
+
+//       // Import module and function
+//       PyObject *pModule = PyImport_ImportModule("your_module_name");
+//       PyObject *pFunc = PyObject_GetAttrString(pModule, "generate_text");
+
+//       // Create arguments tuple
+//       PyObject *pArgs = PyTuple_New(1);
+//       PyTuple_SetItem(pArgs, 0, PyUnicode_FromString("your_prompt_text"));
+
+//       // Call function and get result
+//       PyObject *pResult = PyObject_CallObject(pFunc, pArgs);
+
+//       // Parse result
+//       const char *result = PyUnicode_AsUTF8(pResult);
+
+//       // Cleanup
+//       Py_DECREF(pModule);
+//       Py_DECREF(pFunc);
+//       Py_DECREF(pArgs);
+//       Py_DECREF(pResult);
+
+//       Py_Finalize();
+
     QString response = generate_text(user_input, 50, 1, 0.5);
     add_message("Chatbot", response);
 
