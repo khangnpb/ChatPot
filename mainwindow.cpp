@@ -72,7 +72,8 @@ void MainWindow::send_message()
 //       Py_Finalize();
 
     QString response = generate_text(user_input, 50, 1, 0.5);
-    add_message("Chatbot", response);
+
+    add_message("Chatbot", response); //đưa tin nhắn của chatbot lên
 
     QObject::connect(send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
     QObject::connect(line_edit_, &QLineEdit::returnPressed, this, &MainWindow::send_message);
@@ -93,6 +94,8 @@ QByteArray MainWindow::post_data(const QString &text)
     return json_doc.toJson();
 }
 
+//prompt là input của mình đưa cho chatgpt, đưa chuỗi "prompt" vào rồi đọc từ chatgpt
+//max_tokens là số lượng ký tự tối đa mà chatgpt trả lời
 QString MainWindow::generate_text(QString prompt, int max_tokens, int n, float temperature)
 {
     QNetworkAccessManager manager;
