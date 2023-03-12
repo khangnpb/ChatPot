@@ -9,6 +9,9 @@
 #include <QtNetwork>
 #include <QJsonObject>
 #include <QJsonDocument>
+//#include "zmqbridge.h"
+//#include <QQmlApplicationEngine>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

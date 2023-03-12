@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 //#include "ui_mainwindow.h"
 //#include <QObject>
-#include <Python.h>
+//#include <Python.h>
 
 //MainWindow::~MainWindow()
 //{
@@ -112,7 +112,7 @@ QString MainWindow::generate_text(QString prompt, int max_tokens, int n, float t
     prompt_obj["n"] = n;
 
     QJsonObject data_obj;
-    data_obj["prompt"] = prompt_obj;
+    data_obj["prompt"] = prompt;
     data_obj["stop"] = "\n";
 
     QJsonDocument doc(data_obj);
