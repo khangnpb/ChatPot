@@ -1,3 +1,5 @@
+#include <Python.h>
+
 #include "mainwindow.h"
 
 
@@ -46,7 +48,7 @@ void MainWindow::send_message()
 
     add_message("You", user_input);
 
-//    // Initialize Python interpreter
+    // Initialize Python interpreter
 //       Py_Initialize();
 
 //       // Import module and function
