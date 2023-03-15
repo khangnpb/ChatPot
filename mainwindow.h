@@ -10,7 +10,9 @@
 #include <QtNetwork>
 #include <QJsonObject>
 #include <QJsonDocument>
-
+#include <QProcess>
+#include <QMessageBox>
+#include <QStringList>
 
 
 QT_BEGIN_NAMESPACE
@@ -35,6 +37,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QProcess *python_process;
+
     QString api_key_;
     QString chatbot_id_;
     QString url_;

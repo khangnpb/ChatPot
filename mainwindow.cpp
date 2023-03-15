@@ -1,10 +1,9 @@
 #include <Python.h>
 
 #include "mainwindow.h"
+#include <QDebug>
 
-
-
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), python_process(new QProcess(this))
 {
     ui->setupUi(this);
 
@@ -16,10 +15,52 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->send_button->setLayoutDirection(Qt::RightToLeft);
     ui->clean_button->setIcon(QIcon(":/image/clean.png"));
 
+    QStringList arguments;
+    arguments << "C:/Users/tuankiet/Desktop/ChatPot/Python/chatgpt.py";
+
+    python_process->start("python", arguments);
+    //python_process->setProcessChannelMode(QProcess::MergedChannels);
+
+    if (python_process->state() == QProcess::NotRunning)
+        QMessageBox::warning(this, "error", "your process is not running");
+
+    if (!python_process->waitForStarted())
+    {
+        qDebug() << "Error: Could not start process";
+        QMessageBox::warning(this, "error", "your process is not running");
+    }
 
 
     QObject::connect(ui->send_button, &QPushButton::clicked, this, &MainWindow::send_message);
     QObject::connect(ui->line_edit, &QLineEdit::returnPressed, this, &MainWindow::send_message);
+
+
+    QByteArray output = python_process->readAllStandardOutput();
+    qDebug() << output;
+
+    // Write some input to the script
+    python_process->write("Hello\n");
+
+    // Wait for the script to finish
+    if (!python_process->waitForFinished())
+    {
+        qDebug() << "Error: Could not finish process";
+        QMessageBox::warning(this, "error", "your process is not running");
+    }
+
+    // Read the final output from the script
+    output = python_process->readAllStandardOutput();
+    qDebug() << output;
+
+
+    //đoạn test xem đọc có được không
+//    add_message("You", "hellol");
+//    python_process->write("hellol");
+////    python_process->waitForFinished(-1);
+//    QString response ;//= python_process->readChannel();
+//    add_message("Chatbot", response); //đưa tin nhắn của chatbot lên
+
+
 
     api_key_ = "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";
     chatbot_id_ = "davinci";
@@ -48,32 +89,12 @@ void MainWindow::send_message()
 
     add_message("You", user_input);
 
-    // Initialize Python interpreter
-//       Py_Initialize();
+    python_process->write(user_input.toLocal8Bit().data());
+   // python_process->waitForFinished(-1);
+    QString response = python_process->readAllStandardOutput();
 
-//       // Import module and function
-//       PyObject *pModule = PyImport_ImportModule("your_module_name");
-//       PyObject *pFunc = PyObject_GetAttrString(pModule, "generate_text");
 
-//       // Create arguments tuple
-//       PyObject *pArgs = PyTuple_New(1);
-//       PyTuple_SetItem(pArgs, 0, PyUnicode_FromString("your_prompt_text"));
-
-//       // Call function and get result
-//       PyObject *pResult = PyObject_CallObject(pFunc, pArgs);
-
-//       // Parse result
-//       const char *result = PyUnicode_AsUTF8(pResult);
-
-//       // Cleanup
-//       Py_DECREF(pModule);
-//       Py_DECREF(pFunc);
-//       Py_DECREF(pArgs);
-//       Py_DECREF(pResult);
-
-//       Py_Finalize();
-
-    QString response = generate_text(user_input, 50, 1, 0.5);
+    //QString response = generate_text(user_input, 50, 1, 0.5);
 
     add_message("Chatbot", response); //đưa tin nhắn của chatbot lên
 

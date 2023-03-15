@@ -2,6 +2,6 @@
     <qresource prefix="/">
         <file>image/send.png</file>
         <file>image/clean.png</file>
-        <file>Python/chagpt.py</file>
+        <file>Python/chatgpt.py</file>
     </qresource>
 </RCC>
