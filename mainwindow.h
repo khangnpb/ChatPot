@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "ui_mainwindow.h"
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QTextEdit>
@@ -9,8 +10,6 @@
 #include <QtNetwork>
 #include <QJsonObject>
 #include <QJsonDocument>
-//#include "zmqbridge.h"
-//#include <QQmlApplicationEngine>
 
 
 QT_BEGIN_NAMESPACE
@@ -23,7 +22,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    //~MainWindow();
+    ~MainWindow();
 
 private slots:
 
@@ -34,10 +33,7 @@ private slots:
     QByteArray post_data(const QString &text);
 
 private:
-
-    QTextEdit *text_edit_;
-    QLineEdit *line_edit_;
-    QPushButton *send_button_;
+    Ui::MainWindow *ui;
     QString api_key_;
     QString chatbot_id_;
     QString url_;

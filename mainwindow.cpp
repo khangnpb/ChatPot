@@ -1,48 +1,40 @@
 #include "mainwindow.h"
-//#include "ui_mainwindow.h"
-//#include <QObject>
-//#include <Python.h>
-
-//MainWindow::~MainWindow()
-//{
-//    delete ui;
-//}a
 
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
+
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
+    ui->setupUi(this);
+
     setWindowTitle("Chatbot");
 
-    text_edit_ = new QTextEdit (this);
-    line_edit_ = new QLineEdit (this);
-    send_button_ = new QPushButton( "Send", this);
+    ui->text_edit_->setReadOnly(true);
 
-    text_edit_->setReadOnly(true);
-
-    QVBoxLayout *layout = new QVBoxLayout (this);
-    layout->addWidget(text_edit_);
-    layout->addWidget(line_edit_);
-    layout->addWidget(send_button_);
-
-    QWidget *central_widget = new QWidget(this);
-    central_widget->setLayout(layout);
-    setCentralWidget(central_widget);
-
-    QObject::connect(send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
-    QObject::connect(line_edit_, &QLineEdit::returnPressed, this, &MainWindow::send_message);
+    QObject::connect(ui->send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
+    QObject::connect(ui->line_edit_, &QLineEdit::returnPressed, this, &MainWindow::send_message);
 
     api_key_ = "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";
     chatbot_id_ = "davinci";
     url_ = "https://api.openai.com/v1/engines/" + chatbot_id_ + "/completions";
 }
 
+MainWindow::~MainWindow()
+{
+    if (ui)
+    {
+        delete ui;
+        ui = nullptr;
+    }
+}
+
+
 void MainWindow::send_message()
 {
-    QObject::disconnect(send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
-    QObject::disconnect(line_edit_, &QLineEdit::returnPressed, this, &MainWindow::send_message);
+    QObject::disconnect(ui->send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
+    QObject::disconnect(ui->line_edit_, &QLineEdit::returnPressed, this, &MainWindow::send_message);
 
-    QString user_input = line_edit_->text();
-    line_edit_->clear();
+    QString user_input = ui->line_edit_->text();
+    ui->line_edit_->clear();
 
     add_message("You", user_input);
 
@@ -75,14 +67,14 @@ void MainWindow::send_message()
 
     add_message("Chatbot", response); //đưa tin nhắn của chatbot lên
 
-    QObject::connect(send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
-    QObject::connect(line_edit_, &QLineEdit::returnPressed, this, &MainWindow::send_message);
+    QObject::connect(ui->send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
+    QObject::connect(ui->line_edit_, &QLineEdit::returnPressed, this, &MainWindow::send_message);
 }
 
 void MainWindow::add_message(const QString &name, const QString &message)
 {
     QString formatted_message = QString("<b>%1:</b> %2").arg(name).arg(message);
-    text_edit_->append(formatted_message);
+    ui->text_edit_->append(formatted_message);
 }
 
 QByteArray MainWindow::post_data(const QString &text)
