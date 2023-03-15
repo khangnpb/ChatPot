@@ -9,9 +9,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     setWindowTitle("Chatbot");
 
     ui->text_edit_->setReadOnly(true);
+//    ui->send_button_->resize();
+    ui->send_button->setIcon(QIcon(":/image/send.png"));
+    ui->send_button->setLayoutDirection(Qt::RightToLeft);
+    ui->clean_button->setIcon(QIcon(":/image/clean.png"));
 
-    QObject::connect(ui->send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
-    QObject::connect(ui->line_edit_, &QLineEdit::returnPressed, this, &MainWindow::send_message);
+
+
+    QObject::connect(ui->send_button, &QPushButton::clicked, this, &MainWindow::send_message);
+    QObject::connect(ui->line_edit, &QLineEdit::returnPressed, this, &MainWindow::send_message);
 
     api_key_ = "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";
     chatbot_id_ = "davinci";
@@ -30,11 +36,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::send_message()
 {
-    QObject::disconnect(ui->send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
-    QObject::disconnect(ui->line_edit_, &QLineEdit::returnPressed, this, &MainWindow::send_message);
+    QString user_input = ui->line_edit->text();
+    if (user_input == "") return;
 
-    QString user_input = ui->line_edit_->text();
-    ui->line_edit_->clear();
+    QObject::disconnect(ui->send_button, &QPushButton::clicked, this, &MainWindow::send_message);
+    QObject::disconnect(ui->line_edit, &QLineEdit::returnPressed, this, &MainWindow::send_message);
+
+    ui->line_edit->clear();
 
     add_message("You", user_input);
 
@@ -67,8 +75,8 @@ void MainWindow::send_message()
 
     add_message("Chatbot", response); //đưa tin nhắn của chatbot lên
 
-    QObject::connect(ui->send_button_, &QPushButton::clicked, this, &MainWindow::send_message);
-    QObject::connect(ui->line_edit_, &QLineEdit::returnPressed, this, &MainWindow::send_message);
+    QObject::connect(ui->send_button, &QPushButton::clicked, this, &MainWindow::send_message);
+    QObject::connect(ui->line_edit, &QLineEdit::returnPressed, this, &MainWindow::send_message);
 }
 
 void MainWindow::add_message(const QString &name, const QString &message)

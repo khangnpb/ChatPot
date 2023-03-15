@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>image/send.png</file>
+        <file>image/clean.png</file>
+    </qresource>
+</RCC>
