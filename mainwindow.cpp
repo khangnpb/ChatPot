@@ -31,10 +31,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     {
         QMessageBox::warning(this, "error", "your process is not running");
     }
-    if (!process.waitForStarted())
-    {
-        QMessageBox::warning(this, "error", "your process is crashed");
-    }
+//    if (!process.waitForStarted())
+//    {
+//        QMessageBox::warning(this, "error", "your process is crashed");
+//    }
 
 
 

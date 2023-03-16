@@ -42,6 +42,7 @@ private:
     QString api_key_;
     QString chatbot_id_;
     QString url_;
+    QByteArray ouput{};
 
     QString generate_text(QString prompt, int max_tokens, int n, float temperature);
 };
