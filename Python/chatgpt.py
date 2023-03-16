@@ -12,7 +12,7 @@ messages = [
 ]
 
 while True:
-    message = input("You: ")
+    message = input("")
     if message:
         if message == "q": 
             print("q is input, chat end")
@@ -25,6 +25,6 @@ while True:
         )
     
     reply = chatCompletion.choices[0].message.content
-    print(f"Chatbot: {reply}")
+    print(f"{reply}")
     messages.append({"role": "assistant", "content": reply})
 

@@ -19,26 +19,31 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     python_process->start("python", arguments);
     python_process->setProcessChannelMode(QProcess::MergedChannels);
 
-
-
     if (python_process->state() == QProcess::NotRunning)
     {
         QMessageBox::warning(this, "error", "your process is not running");
     }
 
 
-    QObject::connect(python_process, &QProcess::readyReadStandardOutput, this, &receive_response);
-
-    QObject::connect(ui->send_button, &QPushButton::clicked, this, &MainWindow::send_message);
-    QObject::connect(ui->line_edit, &QLineEdit::returnPressed, this, &MainWindow::send_message);
+    QObject::connect(python_process,  &QProcess::readyReadStandardOutput, this, &receive_response);
+    QObject::connect(ui->send_button, &QPushButton::clicked,              this, &MainWindow::send_message);
+    QObject::connect(ui->line_edit,   &QLineEdit::returnPressed,          this, &MainWindow::send_message);
     /* khi nhấn enter, thì tín hiệu này sẽ được phát để đi vào hàm send_message
      * send_message phải handle dược tin nhắn này
      */
+
+
+    //test
+    python_process->write("hello\r\n");
 }
 
 void MainWindow::receive_response()
 {
     this->isResponding = false;
+
+    QString  response (python_process->readAllStandardOutput() );
+    add_message("Chatbot", response); //đưa tin nhắn của chatbot lên
+    qDebug() << response;
 }
 
 void MainWindow::send_message()
@@ -52,13 +57,14 @@ void MainWindow::send_message()
     ui->line_edit->clear();
     add_message("You", user_input);
 
+    user_input += "\r\n";
     python_process->write(user_input.toUtf8());
     isResponding = true;
 
-    while (isResponding); //wait while chatbot is responding message
+    while (this->isResponding) delay(); //wait while chatbot is responding message
 
-    QString response (python_process->readAllStandardOutput() );
-    add_message("Chatbot", response); //đưa tin nhắn của chatbot lên
+//    QString response (python_process->readAllStandardOutput() );
+//    add_message("Chatbot", response); //đưa tin nhắn của chatbot lên
 
     QObject::connect(ui->send_button, &QPushButton::clicked, this, &MainWindow::send_message);
     QObject::connect(ui->line_edit, &QLineEdit::returnPressed, this, &MainWindow::send_message);
@@ -81,6 +87,15 @@ void MainWindow::add_message(const QString &name, const QString &message)
     ui->text_edit_->append(formatted_message);
 }
 
+void MainWindow::delay()
+{
+    QTime dieTime= QTime::currentTime().addSecs(1);
+    while (QTime::currentTime() < dieTime)
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    //this->add_message("Chatbot", "waiting....");
+}
+
+
 MainWindow::~MainWindow()
 {
     if (ui)
@@ -89,6 +104,7 @@ MainWindow::~MainWindow()
         ui = nullptr;
     }
 }
+
 
 
 /*

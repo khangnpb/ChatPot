@@ -13,6 +13,8 @@
 #include <QProcess>
 #include <QMessageBox>
 #include <QStringList>
+#include <QThread>
+#include <QDebug>
 
 
 QT_BEGIN_NAMESPACE
@@ -37,7 +39,6 @@ private:
     QByteArray post_data(const QString &text);
 
 
-
 private:
     Ui::MainWindow *ui;
     QProcess *python_process;
@@ -46,8 +47,12 @@ private:
     QString chatbot_id_;
     QString url_;
     QByteArray ouput{};
-    bool isResponding;
+    volatile bool isResponding;
+    void delay();
 
     QString generate_text(QString prompt, int max_tokens, int n, float temperature);
 };
+
+
+
 #endif // MAINWINDOW_H
