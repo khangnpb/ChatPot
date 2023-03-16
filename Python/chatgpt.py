@@ -1,4 +1,3 @@
-
 print ("Python is read successfully")
 
 import json
