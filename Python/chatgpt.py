@@ -1,3 +1,6 @@
+
+print ("Python is read successfully")
+
 import json
 import openai
 import os
@@ -10,9 +13,11 @@ messages = [
 ]
 
 while True:
-    message = input("You 👨‍⚕️: ")
+    message = input("You: ")
     if message:
-        if message == "q": break
+        if message == "q": 
+            print("q is input, chat end")
+            break
         messages.append(
             {"role": "user", "content": message},
         )
@@ -21,5 +26,6 @@ while True:
         )
     
     reply = chatCompletion.choices[0].message.content
-    print(f"Chatbot 🧙: {reply}")
+    print(f"Chatbot: {reply}")
     messages.append({"role": "assistant", "content": reply})
+

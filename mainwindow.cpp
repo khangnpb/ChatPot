@@ -1,5 +1,3 @@
-#include <Python.h>
-
 #include "mainwindow.h"
 #include <QDebug>
 
@@ -15,48 +13,57 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->send_button->setLayoutDirection(Qt::RightToLeft);
     ui->clean_button->setIcon(QIcon(":/image/clean.png"));
 
-    QStringList arguments;
-    arguments << "C:/Users/tuankiet/Desktop/ChatPot/Python/chatgpt.py";
-
-    python_process->start("python", arguments);
-    //python_process->setProcessChannelMode(QProcess::MergedChannels);
-
-    if (python_process->state() == QProcess::NotRunning)
-        QMessageBox::warning(this, "error", "your process is not running");
-
-    if (!python_process->waitForStarted())
-    {
-        qDebug() << "Error: Could not start process";
-        QMessageBox::warning(this, "error", "your process is not running");
-    }
-
-
     QObject::connect(ui->send_button, &QPushButton::clicked, this, &MainWindow::send_message);
     QObject::connect(ui->line_edit, &QLineEdit::returnPressed, this, &MainWindow::send_message);
 
 
-    QByteArray output = python_process->readAllStandardOutput();
-    qDebug() << output;
+    QStringList arguments;
+    arguments << "C:/Users/tuankiet/Desktop/ChatPot/Python/chatgpt.py";
+    python_process->start("python", arguments);
+    python_process->setProcessChannelMode(QProcess::MergedChannels);
 
-    // Write some input to the script
-    python_process->write("Hello\n");
+    QObject::connect(&process, &QProcess::readyReadStandardOutput,
+                     [&process, &output](){
+                            output = process.readAllStandardOutput();
+                        });
 
-    // Wait for the script to finish
-    if (!python_process->waitForFinished())
+    if (process.state() == QProcess::NotRunning)
     {
-        qDebug() << "Error: Could not finish process";
         QMessageBox::warning(this, "error", "your process is not running");
     }
+    if (!process.waitForStarted())
+    {
+        QMessageBox::warning(this, "error", "your process is crashed");
+    }
 
-    // Read the final output from the script
-    output = python_process->readAllStandardOutput();
-    qDebug() << output;
+
+
+//    python_process->write("hello", qstrlen("hello"));
+
+//    python_process->waitForFinished(-1);
+//    QByteArray output = python_process->readAllStandardOutput();
+//    qDebug() << output;
+
+//    // Write some input to the script
+//    python_process->write("hello", qstrlen("hello"));
+
+//    // Wait for the script to finish
+//    if (!python_process->waitForFinished())
+//    {
+//        qDebug() << "Error: Could not finish process 2";
+//        //QMessageBox::warning(this, "error", "your process is not running");
+//    }
+
+//    python_process->waitForFinished(-1);
+//    // Read the final output from the script
+//    output = python_process->readAllStandardOutput();
+//    qDebug() << output;
 
 
     //đoạn test xem đọc có được không
 //    add_message("You", "hellol");
-//    python_process->write("hellol");
-////    python_process->waitForFinished(-1);
+//    python_process->write("hello", qstrlen("hello"));
+//    python_process->waitForFinished(-1);
 //    QString response ;//= python_process->readChannel();
 //    add_message("Chatbot", response); //đưa tin nhắn của chatbot lên
 
@@ -89,12 +96,13 @@ void MainWindow::send_message()
 
     add_message("You", user_input);
 
-    python_process->write(user_input.toLocal8Bit().data());
-   // python_process->waitForFinished(-1);
+    auto data = user_input.toLocal8Bit().data();
+    python_process->write(data, qstrlen(data));
+    python_process->waitForFinished(-1);
     QString response = python_process->readAllStandardOutput();
 
 
-    //QString response = generate_text(user_input, 50, 1, 0.5);
+//    QString response = generate_text(user_input, 50, 1, 0.5);
 
     add_message("Chatbot", response); //đưa tin nhắn của chatbot lên
 
@@ -112,7 +120,7 @@ QByteArray MainWindow::post_data(const QString &text)
 {
     QJsonObject json;
     json["prompt"] = text;
-    json["model"] = "text-davinci-002";
+    json["model"] = "gpt-3.5-turbo";
     QJsonDocument json_doc(json);
     return json_doc.toJson();
 }
