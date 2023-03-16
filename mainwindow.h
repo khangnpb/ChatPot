@@ -28,12 +28,15 @@ public:
     ~MainWindow();
 
 private slots:
-
     void send_message();
+    void receive_response();
 
+private:
     void add_message(const QString &name, const QString &message);
 
     QByteArray post_data(const QString &text);
+
+
 
 private:
     Ui::MainWindow *ui;
@@ -43,6 +46,7 @@ private:
     QString chatbot_id_;
     QString url_;
     QByteArray ouput{};
+    bool isResponding;
 
     QString generate_text(QString prompt, int max_tokens, int n, float temperature);
 };
