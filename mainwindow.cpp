@@ -21,9 +21,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     if (python_process->state() == QProcess::NotRunning)
     {
-        QMessageBox::warning(this, "error", "your process is not running");
+        QMessageBox::warning(this, "Crashed!", "Your process is not running");
     }
-
 
     QObject::connect(python_process,  &QProcess::readyReadStandardOutput, this, &receive_response);
     QObject::connect(ui->send_button, &QPushButton::clicked,              this, &MainWindow::send_message);
@@ -31,19 +30,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     /* khi nhấn enter, thì tín hiệu này sẽ được phát để đi vào hàm send_message
      * send_message phải handle dược tin nhắn này
      */
-
-
-    //test
-    python_process->write("hello\r\n");
 }
 
 void MainWindow::receive_response()
 {
     this->isResponding = false;
-
-    QString  response (python_process->readAllStandardOutput() );
-    add_message("Chatbot", response); //đưa tin nhắn của chatbot lên
-    qDebug() << response;
 }
 
 void MainWindow::send_message()
@@ -61,24 +52,23 @@ void MainWindow::send_message()
     python_process->write(user_input.toUtf8());
     isResponding = true;
 
-    while (this->isResponding) delay(); //wait while chatbot is responding message
+    while (this->isResponding)
+    {
+        if (python_process->state() == QProcess::NotRunning)
+        {
+            QMessageBox::warning(this, "Crashed!", "Your process is failed. Please restart!");
+            QApplication::exit();
+        }
+        delay(); //wait while chatbot is responding message
+    }
 
-//    QString response (python_process->readAllStandardOutput() );
-//    add_message("Chatbot", response); //đưa tin nhắn của chatbot lên
+    QString  response (python_process->readAllStandardOutput() );
+    add_message("Chatbot", response); //đưa tin nhắn của chatbot lên
+    //qDebug() << response;
 
     QObject::connect(ui->send_button, &QPushButton::clicked, this, &MainWindow::send_message);
     QObject::connect(ui->line_edit, &QLineEdit::returnPressed, this, &MainWindow::send_message);
 }
-
-    /*
-    auto data = user_input.toLocal8Bit().data();
-    python_process->write(data, qstrlen(data));
-    python_process->waitForFinished(-1);
-    QString response = python_process->readAllStandardOutput();
-    */
-
-//    QString response = generate_text(user_input, 50, 1, 0.5);
-
 
 
 void MainWindow::add_message(const QString &name, const QString &message)
