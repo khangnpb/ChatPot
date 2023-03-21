@@ -52,14 +52,23 @@ void MainWindow::send_message()
     python_process->write(user_input.toUtf8());
     isResponding = true;
 
+    bool failed = false;
+
     while (this->isResponding)
     {
         if (python_process->state() == QProcess::NotRunning)
         {
-            QMessageBox::warning(this, "Crashed!", "Your process is failed. Please restart!");
-            QApplication::exit();
+            failed = true;
+            break;
+
         }
         delay(); //wait while chatbot is responding message
+    }
+    if failed
+    {
+        QMessageBox::warning(this, "Crashed!", "Your process is failed. Please restart!");
+        QApplication::exit();
+        return;
     }
 
     QString  response (python_process->readAllStandardOutput() );
