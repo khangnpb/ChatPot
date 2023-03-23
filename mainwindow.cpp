@@ -1,18 +1,47 @@
 #include "mainwindow.h"
 #include <QDebug>
 
+//#include <QColorDialog>
+//#include <QPalette>
+//#include <QTextCursor>
+//#include <QTextEdit>
+//#include <QTextDocumentFragment>
+//#include <QUrl>
+//#include <QTextDocument>
+#include <QTextImageFormat>
+//#include <QVariant>
+//#include <QImage>
+//#include <QImageReader>
+#include <QFileDialog>
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), python_process(new QProcess(this))
 {
     ui->setupUi(this);
+    setWindowIcon(QIcon(":/image/ai.png"));
+    setWindowTitle("QtBot");
 
-    setWindowTitle("Chatbot");
+//     //1
+
+//        QColor color = QColorDialog::getColor(Qt::white,this);
+//        ui->text_edit_->setPalette(QPalette(Qt::white));
+
+//     //1
+
+//     //2
+//        QPalette palette = ui->text_edit_->palette();
+
+//        QColor color = QColorDialog::getColor(Qt::black,this); // in here your color pallete will open..
+
+//        QPalette p = ui->text_edit_->palette(); // define pallete for textEdit..
+//        p.setColor(QPalette::Base, Qt::white); // set color "Red" for textedit base
+//        p.setColor(QPalette::Text, color); // set text color which is selected from color pallete
+//        ui->text_edit_->setPalette(p); // change textedit palette
+//     //2
 
     ui->text_edit_->setReadOnly(true);
     ui->send_button->setIcon(QIcon(":/image/send.png"));
     ui->send_button->setLayoutDirection(Qt::RightToLeft);
     ui->clean_button->setIcon(QIcon(":/image/clean.png"));
-
-
 
     QStringList arguments;
     arguments << "C:/Users/tuankiet/Desktop/ChatPot/Python/chatgpt.py";
@@ -64,7 +93,7 @@ void MainWindow::send_message()
         }
         delay(); //wait while chatbot is responding message
     }
-    if failed
+    if (failed)
     {
         QMessageBox::warning(this, "Crashed!", "Your process is failed. Please restart!");
         QApplication::exit();
@@ -79,10 +108,49 @@ void MainWindow::send_message()
     QObject::connect(ui->line_edit, &QLineEdit::returnPressed, this, &MainWindow::send_message);
 }
 
+////
+//void text_edit_::insertImage()
+//{
+//    QString file = QFileDialog::getOpenFileName(this, tr("Select an image"),
+//                                  ".", tr("Bitmap Files (*.bmp)\n"
+//                                    "JPEG (*.jpg *jpeg)\n"
+//                                    "GIF (*.gif)\n"
+//                                    "PNG (*.png)\n"));
+//    QUrl Uri ( QString ( "file://%1" ).arg ( file ) );
+//    QImage image = QImageReader ( file ).read();
+
+//    QTextDocument * textDocument = m_textEdit->document();
+//    textDocument->addResource( QTextDocument::ImageResource, Uri, QVariant ( image ) );
+//    QTextCursor cursor = m_textEdit->textCursor();
+//    QTextImageFormat imageFormat;
+//    imageFormat.setWidth( image.width() );
+//    imageFormat.setHeight( image.height() );
+//    imageFormat.setName( Uri.toString() );
+//    cursor.insertImage(imageFormat);
+// }
+////
 
 void MainWindow::add_message(const QString &name, const QString &message)
 {
-    QString formatted_message = QString("<b>%1:</b> %2").arg(name).arg(message);
+
+//    //
+//        QTextEdit *textEditor = new QTextEdit(0);
+//        QTextDocumentFragment fragment;
+//        fragment = QTextDocumentFragment::fromHtml("<img src = ':/image/ai.png'>");
+//        textEditor->textCursor().insertFragment(fragment);
+//        textEditor->setVisible(true);
+//    //
+
+QString cheminImage;
+if (name == "You") cheminImage = ":/image/User2.png";
+else cheminImage = ":/image/ai.png";
+//QString cheminImage = ":/image/ai.png";
+QString texteFinal = ui->text_edit_->toHtml() + "<img src = \""+ cheminImage +"\" alt = \"\" width = '35' height = '35' \>";
+//texteFinal.setHeight(20);
+    ui->text_edit_->setHtml(texteFinal);
+
+//    QString formatted_message = QString("<b>%1: </b> %2").arg(name).arg(message);
+    QString formatted_message = QString("%0").arg(message);
     ui->text_edit_->append(formatted_message);
 }
 
