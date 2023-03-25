@@ -75,7 +75,7 @@ void MainWindow::send_message()
     QObject::disconnect(ui->line_edit, &QLineEdit::returnPressed, this, &MainWindow::send_message);
 
     ui->line_edit->clear();
-    add_message("You", user_input);
+    add_message("You", user_input + "\n");
 
     user_input += "\r\n";
     python_process->write(user_input.toUtf8());
