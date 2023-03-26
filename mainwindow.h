@@ -25,20 +25,6 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
-
-private slots:
-    void send_message();
-    void receive_response();
-
-private:
-    void add_message(const QString &name, const QString &message);
-
-    QByteArray post_data(const QString &text);
-
-
 private:
     Ui::MainWindow *ui;
     QProcess *python_process;
@@ -48,9 +34,21 @@ private:
     QString url_;
     QByteArray ouput{};
     volatile bool isResponding;
-    void delay();
 
+public:
+    MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+
+private:
+    void add_message(const QString &name, const QString &message);
+    QByteArray post_data(const QString &text);
+    void closeEvent(QCloseEvent *event);
+    void delay();
     QString generate_text(QString prompt, int max_tokens, int n, float temperature);
+
+private slots:
+    void send_message();
+    void receive_response();
 };
 
 

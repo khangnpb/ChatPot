@@ -22,9 +22,6 @@ First::~First()
 
 void First::on_pushButton_clicked()
 {
-//    MainWindow bot;
-//    bot.setModal(true);
-//    bot.exec();
     hide();
     mainwindow = new MainWindow(this);
     mainwindow->show();
