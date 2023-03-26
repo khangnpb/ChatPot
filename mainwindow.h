@@ -3,17 +3,9 @@
 
 #include "ui_mainwindow.h"
 #include <QMainWindow>
-#include <QVBoxLayout>
-#include <QTextEdit>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QtNetwork>
-#include <QJsonObject>
-#include <QJsonDocument>
 #include <QProcess>
 #include <QMessageBox>
 #include <QStringList>
-#include <QThread>
 #include <QDebug>
 
 

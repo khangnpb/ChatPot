@@ -2,6 +2,7 @@
 #define FIRST_H
 
 #include <QDialog>
+#include <QPixmap>
 #include "mainwindow.h"
 namespace Ui {
 class First;

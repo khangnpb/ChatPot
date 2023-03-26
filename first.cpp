@@ -1,6 +1,5 @@
 #include "first.h"
 #include "ui_first.h"
-#include <QPixmap>
 
 First::First(QWidget *parent) :
     QDialog(parent),
