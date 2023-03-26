@@ -15,8 +15,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->send_button->setLayoutDirection(Qt::RightToLeft);
     ui->clean_button->setIcon(QIcon(":/image/clean.png"));
 
+//    QString path = QDir::currentPath() + "/chatgpt.py";
+    QString path =  QCoreApplication :: applicationDirPath ()  + "/chatgpt.py"; //sử dụng cách này sẽ deploy được một file độc lập
+//    QMessageBox::warning(this, "Crashed!",path);
+
     QStringList arguments;
-    arguments << "C:/Users/tuankiet/Desktop/ChatPot/Python/chatgpt.py";
+//    arguments << "C:/Users/tuankiet/Desktop/ChatPot/Python/chatgpt.py";
+    arguments << path;
     python_process->start("python", arguments);
     python_process->setProcessChannelMode(QProcess::MergedChannels);
 
