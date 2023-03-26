@@ -7,6 +7,7 @@ First::First(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowIcon(QIcon(":/image/ai.png"));
+    setWindowTitle("QtBot");
 
     QPixmap pix(":/image/ai.png");
     int w = ui->label_pic->width();
