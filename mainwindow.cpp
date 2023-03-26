@@ -20,8 +20,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 //    QMessageBox::warning(this, "Crashed!",path);
 
     QStringList arguments;
-//    arguments << "C:/Users/tuankiet/Desktop/ChatPot/Python/chatgpt.py";
-    arguments << path;
+    arguments << "C:/Users/tuankiet/Desktop/ChatPot/Python/chatgpt.py";
+//    arguments << path;
     python_process->start("python", arguments);
     python_process->setProcessChannelMode(QProcess::MergedChannels);
 
