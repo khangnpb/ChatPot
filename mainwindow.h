@@ -41,6 +41,7 @@ private:
 private slots:
     void send_message();
     void receive_response();
+    void on_clean_button_clicked();
 };
 
 
