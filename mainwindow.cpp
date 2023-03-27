@@ -21,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     QStringList arguments;
     arguments << "C:/Users/tuankiet/Desktop/ChatPot/Python/chatgpt.py";
-//    arguments << path;
     python_process->start("python", arguments);
     python_process->setProcessChannelMode(QProcess::MergedChannels);
 
@@ -85,10 +84,10 @@ void MainWindow::send_message()
 
 void MainWindow::add_message(const QString &name, const QString &message)
 {
-QString cheminImage;
-if (name == "You") cheminImage = ":/image/User2.png";
-else cheminImage = ":/image/ai.png";
-QString texteFinal = ui->text_edit_->toHtml() + "<img src = \""+ cheminImage +"\" alt = \"\" width = '35' height = '35' \>";
+    QString cheminImage;
+    if (name == "You") cheminImage = ":/image/User2.png";
+    else cheminImage = ":/image/ai.png";
+    QString texteFinal = ui->text_edit_->toHtml() + "<img src = \""+ cheminImage +"\" alt = \"\" width = '35' height = '35' \>";
     ui->text_edit_->setHtml(texteFinal);
 
     QString formatted_message = QString("%0").arg(message);
