@@ -10,6 +10,7 @@
 #include <QTextImageFormat>
 #include <QFileDialog>
 #include <QFile>
+#include <QScrollBar>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

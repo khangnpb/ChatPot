@@ -93,6 +93,9 @@ void MainWindow::add_message(const QString &name, const QString &message)
 
     QString formatted_message = QString("%0").arg(message);
     ui->text_edit_->append(formatted_message);
+
+    QScrollBar *sb = ui->text_edit_->verticalScrollBar();
+    sb->setValue(sb->maximum());
 }
 
 
