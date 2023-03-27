@@ -6,8 +6,10 @@
 #include <QProcess>
 #include <QMessageBox>
 #include <QStringList>
-#include <QDebug>
-
+#include <QShortcut>
+#include <QTextImageFormat>
+#include <QFileDialog>
+#include <QFile>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -42,6 +44,7 @@ private slots:
     void send_message();
     void receive_response();
     void on_clean_button_clicked();
+    void save_conversation();
 };
 
 
