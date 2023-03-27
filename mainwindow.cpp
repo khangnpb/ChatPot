@@ -103,10 +103,10 @@ void MainWindow::delay()
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    QApplication::exit();
-}
+//void MainWindow::closeEvent(QCloseEvent *event)
+//{
+//    QApplication::exit();
+//}
 
 MainWindow::~MainWindow()
 {
