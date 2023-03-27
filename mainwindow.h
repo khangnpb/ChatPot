@@ -34,7 +34,7 @@ public:
 private:
     void add_message(const QString &name, const QString &message);
     QByteArray post_data(const QString &text);
-    void closeEvent(QCloseEvent *event);
+//    void closeEvent(QCloseEvent *event);
     void delay();
     QString generate_text(QString prompt, int max_tokens, int n, float temperature);
 

@@ -97,10 +97,6 @@ QString texteFinal = ui->text_edit_->toHtml() + "<img src = \""+ cheminImage +"\
     ui->text_edit_->append(formatted_message);
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    QApplication::exit();
-}
 
 void MainWindow::delay()
 {
@@ -109,6 +105,10 @@ void MainWindow::delay()
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 }
 
+//void MainWindow::closeEvent(QCloseEvent *event)
+//{
+//    QApplication::exit();
+//}
 
 MainWindow::~MainWindow()
 {

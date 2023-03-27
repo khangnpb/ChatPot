@@ -22,8 +22,8 @@ First::~First()
 
 void First::on_pushButton_clicked()
 {
-    hide();
-    mainwindow = new MainWindow(this);
+    close();
+    mainwindow = new MainWindow();
     mainwindow->show();
 }
 
