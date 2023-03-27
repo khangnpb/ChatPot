@@ -1,8 +1,6 @@
 #include "mainwindow.h"
-#include <QDebug>
-#include <QTextImageFormat>
+//#include <QDebug>
 
-#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), python_process(new QProcess(this))
 {
@@ -31,6 +29,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     QObject::connect(python_process,  &QProcess::readyReadStandardOutput, this, &receive_response);
     QObject::connect(ui->send_button, &QPushButton::clicked,              this, &MainWindow::send_message);
     QObject::connect(ui->line_edit,   &QLineEdit::returnPressed,          this, &MainWindow::send_message);
+
+    //để có thể lưu lịch sử trò chuyện
+    QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_S), this);
+    QObject::connect(shortcut, SIGNAL(activated()), this, SLOT(save_conversation()));
 
 }
 
@@ -119,5 +121,29 @@ MainWindow::~MainWindow()
 void MainWindow::on_clean_button_clicked()
 {
     ui->text_edit_->clear();
+}
+
+void MainWindow::save_conversation()
+{
+    if (ui->text_edit_->toPlainText().isEmpty()) return;
+
+    QString file_name = QFileDialog::getSaveFileName(this, "Save this conversation", QCoreApplication :: applicationDirPath (), "(*.html)");
+    if (file_name == "") return;
+
+    QFile file (file_name, this);
+
+    if (!file.open(QFile::WriteOnly | QFile::Text))
+    {
+        QMessageBox::warning(this, "Error", "Cannot save the file " + file_name);
+        file_name = "";
+        file.close();
+        return;
+    }
+
+    QTextStream out (&file); //cần tìm hiểu dòng này
+    QString text = ui->text_edit_->toHtml();
+    out << text;
+    file.flush();
+    file.close();
 }
 
