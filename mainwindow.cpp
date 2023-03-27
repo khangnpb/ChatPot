@@ -115,3 +115,9 @@ MainWindow::~MainWindow()
     }
 }
 
+
+void MainWindow::on_clean_button_clicked()
+{
+    ui->text_edit_->clear();
+}
+
