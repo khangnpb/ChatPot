@@ -13,6 +13,7 @@ First::First(QWidget *parent) :
     int w = ui->label_pic->width();
     int h = ui->label_pic->height();
     ui->label_pic->setPixmap(pix.scaled(w,h,Qt::KeepAspectRatio));
+    this->setFixedSize(this->size());
 }
 
 First::~First()
